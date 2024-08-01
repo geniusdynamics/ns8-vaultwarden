@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cdb41d59-0094-460e-b82a-9bb5ecb5d7c5" name="Changes" comment="Added Authors" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;kemboi22&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:compgeniuses/ns8-vaultwarden.git&quot;,
+    &quot;accountId&quot;: &quot;c2baa4e2-d255-4623-860f-3ad0f310f78d&quot;
+  }
+}</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="otgzpmuo" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2h491LADvH5eK2tACIwv7xWp968" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/kemboielvis/Desktop/nethserver/ns8-vaultwarden/imageroot/actions/configure-module",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "org.rust.first.attach.projects": "true",
+    "ts.external.directory.path": "/home/kemboielvis/.local/share/JetBrains/Toolbox/apps/intellij-idea-ultimate/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/imageroot/actions/configure-module" />
+    </key>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cdb41d59-0094-460e-b82a-9bb5ecb5d7c5" name="Changes" comment="" />
+      <created>1716842277543</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1716842277543</updated>
+      <workItem from="1716842282970" duration="14828000" />
+      <workItem from="1716906454096" duration="3655000" />
+    </task>
+    <task id="LOCAL-00001" summary="Changes in generate hash">
+      <option name="closed" value="true" />
+      <created>1716842813792</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716842813792</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Removed Generate Hash and hard coded ADMIN_TOKEN">
+      <option name="closed" value="true" />
+      <created>1716844332530</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1716844332530</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Updated Yarn Lock And Changes in generate Hash">
+      <option name="closed" value="true" />
+      <created>1716844752504</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716844752504</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Removed encode function on vaultwardentoken">
+      <option name="closed" value="true" />
+      <created>1716845252168</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1716845252168</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Changed To Argon Hash String">
+      <option name="closed" value="true" />
+      <created>1716846024495</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1716846024495</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Install Argoncffi">
+      <option name="closed" value="true" />
+      <created>1716846456167</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1716846456167</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added ADMIN_TOKEN in env">
+      <option name="closed" value="true" />
+      <created>1716847180529</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1716847180529</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Few Changes In podman commands in vaultwarden-app.service">
+      <option name="closed" value="true" />
+      <created>1716848975199</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1716848975199</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added Restart services in 80start_services">
+      <option name="closed" value="true" />
+      <created>1716849622576</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1716849622576</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added Logfile and permissions">
+      <option name="closed" value="true" />
+      <created>1716850908572</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1716850908572</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Removed SMTP">
+      <option name="closed" value="true" />
+      <created>1716851784389</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1716851784389</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added USE_SENDMAIL">
+      <option name="closed" value="true" />
+      <created>1716853342181</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1716853342181</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added SENDMAIL_COMMAND path">
+      <option name="closed" value="true" />
+      <created>1716855418216</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1716855418216</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Disabled Send Mail">
+      <option name="closed" value="true" />
+      <created>1716856467623</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1716856467623</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added Email Setting in Environment File">
+      <option name="closed" value="true" />
+      <created>1716907659813</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1716907659813</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Get Changes In 25generate-hash &#10;And Also Passing vaultwarden-app.service to allow admin Access">
+      <option name="closed" value="true" />
+      <created>1716909135220</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1716909135220</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added Authors">
+      <option name="closed" value="true" />
+      <created>1716909459890</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1716909459890</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Changes in generate hash" />
+    <MESSAGE value="Removed Generate Hash and hard coded ADMIN_TOKEN" />
+    <MESSAGE value="Updated Yarn Lock And Changes in generate Hash" />
+    <MESSAGE value="Removed encode function on vaultwardentoken" />
+    <MESSAGE value="Changed To Argon Hash String" />
+    <MESSAGE value="Install Argoncffi" />
+    <MESSAGE value="Added ADMIN_TOKEN in env" />
+    <MESSAGE value="Few Changes In podman commands in vaultwarden-app.service" />
+    <MESSAGE value="Added Restart services in 80start_services" />
+    <MESSAGE value="Added Logfile and permissions" />
+    <MESSAGE value="Removed SMTP" />
+    <MESSAGE value="Added USE_SENDMAIL" />
+    <MESSAGE value="Added SENDMAIL_COMMAND path" />
+    <MESSAGE value="Disabled Send Mail" />
+    <MESSAGE value="Added Email Setting in Environment File" />
+    <MESSAGE value="Get Changes In 25generate-hash &#10;And Also Passing vaultwarden-app.service to allow admin Access" />
+    <MESSAGE value="Added Authors" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Authors" />
+  </component>
+</project>

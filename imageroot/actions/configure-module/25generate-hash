@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2023 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+import os
+import json
+import sys
+import agent
+import secrets
+import subprocess
+import binascii
+from argon2 import PasswordHasher
+
+data = json.load(sys.stdin)
+
+# Generate a random admin token
+VAULTWARDEN_ADMIN_TOKEN = data.get("ADMIN_TOKEN", '')
+
+
+# Create a PasswordHasher object with the desired parameters
+ph = PasswordHasher(time_cost=3, memory_cost=65540, parallelism=4, hash_len=32, salt_len=16)
+
+# Generate a random salt
+salt = os.urandom(32)
+
+# Hash the password
+hashed_admin_token = ph.hash(VAULTWARDEN_ADMIN_TOKEN, salt=salt)
+
+
+# Set the environment variable
+agent.set_env("ADMIN_TOKEN", f'{hashed_admin_token}')
+# Make sure everything is saved inside the environment file
+# just before starting systemd unit
+agent.dump_env()

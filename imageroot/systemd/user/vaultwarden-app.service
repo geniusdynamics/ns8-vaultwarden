@@ -23,22 +23,26 @@ TimeoutStopSec=70
 ExecStartPre=/bin/mkdir -p config
 ExecStartPre=/bin/rm -f %t/vaultwarden-app.pid %t/vaultwarden-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
-ExecStartPost=/usr/bin/bash -c "while ! /usr/bin/podman exec vaultwarden-app /usr/bin/curl  http://127.0.0.1:80/vaultwarden ; do sleep 3 ; done"
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/vaultwarden-app.pid \
     --cidfile %t/vaultwarden-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/vaultwarden.pod-id --replace -d --name  vaultwarden-app \
-    --volume=vaultwarden-data:/data \
+    --volume vaultwarden-data:/data:Z \
     --env-file=smarthost.env \
     --env=vaultwarden_* \
+    --env USE_SENDMAIL=false \
+    --env ADMIN_TOKEN=${ADMIN_TOKEN} \
     --env SMTP_HOST=${SMTP_HOST} \
     --env SMTP_FROM=${SMTP_FROM} \
-    --env SMTP_FROM_NAME=${SMTP_FROM_NAME} \
     --env SMTP_SECURITY=${SMTP_ENCRYPTION} \
     --env SMTP_PORT=${SMTP_PORT} \
     --env SMTP_USERNAME=${SMTP_USERNAME} \
     --env SMTP_PASSWORD=${SMTP_PASSWORD} \
-    --env SMTP_AUTH_MECHANISM=${SMTP_AUTH_MECHANISM} \
+    --env LOG_FILE=/data/vaultwarden.log \
+    --env WEBSOCKET_ENABLED=true \
     ${SERVER_IMAGE}
+    #    --env SENDMAIL_COMMAND=/usr/sbin/sendmail \
+
+#ExecStartPost=/usr/bin/bash -c "while ! /usr/bin/podman exec vaultwarden-app /usr/bin/curl  http://127.0.0.1:80/vaultwarden ; do sleep 3 ; done"
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/vaultwarden-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP vaultwarden-app
 SyslogIdentifier=%u

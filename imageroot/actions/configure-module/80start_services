@@ -10,3 +10,4 @@
 touch smarthost.env
 
 systemctl --user enable vaultwarden.service
+systemctl --user restart vaultwarden.service

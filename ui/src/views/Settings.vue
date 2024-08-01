@@ -35,7 +35,7 @@
               v-model="ADMIN_TOKEN"
               class="mg-bottom"
               :invalid-message="$t(error.ADMIN_TOKEN)"
-              :disabled="loading.getConfiguration || loading.configureModule"
+              :disabled="loading.getConfiguration"
               type="password"
               ref="ADMIN_TOKEN"
             >
@@ -214,15 +214,6 @@ export default {
         isValidationOk = false;
       }
 
-      if (!this.ADMIN_TOKEN) {
-        this.error.ADMIN_TOKEN = "common.required";
-
-        if (isValidationOk) {
-          this.focusElement("ADMIN_TOKEN");
-        }
-        isValidationOk = false;
-      }
-
       return isValidationOk;
     },
     configureModuleValidationFailed(validationErrors) {
@@ -275,7 +266,7 @@ export default {
           action: taskAction,
           data: {
             host: this.host,
-            ADMIN_TOKEN: this.ADMIN_TOKEND,
+            ADMIN_TOKEN: this.ADMIN_TOKEN,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
           },

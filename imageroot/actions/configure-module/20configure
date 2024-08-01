@@ -12,27 +12,36 @@ import agent
 
 data = json.load(sys.stdin)
 
+
+# vaultwarden domain settings
+host = data.get("host", "")
+DOMAIN = "https://"+host
+# Testing SMTP Settings on Enviroment
+rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
+agent.set_env("SMTP_HOST", smtp_settings['host'])
+agent.set_env("SMTP_PORT", smtp_settings['port'])
+agent.set_env("SMTP_USERNAME", smtp_settings['username'])
+agent.set_env("SMTP_PASSWORD", smtp_settings['password'])
+agent.set_env("SMTP_ENCRYPTION", smtp_settings['encrypt_smtp'])
+agent.set_env("SMTP_FROM", smtp_settings['username'])
+
 # Define missing variables
 SENDS_ALLOWED = data.get("SENDS_ALLOWED", "")
 EMERGENCY_ACCESS_ALLOWED = data.get("EMERGENCY_ACCESS_ALLOWED", "")
 WEB_VAULT_ENABLED = data.get("WEB_VAULT_ENABLED", "")
-SIGNUPS_ALLOWED = data.get("SIGNUPS_ALLOWED", "")
+SIGNUPS_ALLOWED = data.get("SIGNUPS_ALLOWED", False)
 SIGNUPS_VERIFY = data.get("SIGNUPS_VERIFY", "")
 SIGNUPS_VERIFY_RESEND_TIME = data.get("SIGNUPS_VERIFY_RESEND_TIME", "")
 SIGNUPS_VERIFY_RESEND_LIMIT = data.get("SIGNUPS_VERIFY_RESEND_LIMIT", "")
 SIGNUPS_DOMAINS_WHITELIST = data.get("SIGNUPS_DOMAINS_WHITELIST", "")
-INVITATIONS_ALLOWED = data.get("INVITATIONS_ALLOWED", "")
+INVITATIONS_ALLOWED = data.get("INVITATIONS_ALLOWED", False)
 PUSH_ENABLED = data.get("PUSH_ENABLED", "")
 PUSH_RELAY_URI = data.get("PUSH_RELAY_URI", "")
 PUSH_IDENTITY_URI = data.get("PUSH_IDENTITY_URI", "")
 PUSH_INSTALLATION_ID = data.get("PUSH_INSTALLATION_ID", "")
 PUSH_INSTALLATION_KEY = data.get("PUSH_INSTALLATION_KEY", "")
 SHOW_PASSWORD_HINT = data.get("SHOW_PASSWORD_HINT", "")
-
-# vaultwarden domain settings
-host = data.get("host", "")
-DOMAIN = "https://"+host
-
 
 # Setup configuration from user input.
 agent.set_env("DOMAIN", DOMAIN)
@@ -51,12 +60,13 @@ agent.set_env("LOGIN_RATELIMIT_SECONDS", "60")
 agent.set_env("ADMIN_RATELIMIT_MAX_BURST", "10")
 agent.set_env("ADMIN_RATELIMIT_SECONDS", "60")
 # push
-agent.set_env("SHOW_PASSWORD_HINT")
-agent.set_env("PUSH_ENABLED")
-agent.set_env("PUSH_INSTALLATION_ID")
-agent.set_env("PUSH_INSTALLATION_KEY")
-agent.set_env("PUSH_RELAY_URI")
-agent.set_env("PUSH_IDENTITY_URI")
+agent.set_env("SHOW_PASSWORD_HINT", SHOW_PASSWORD_HINT)
+agent.set_env("PUSH_ENABLED", PUSH_ENABLED)
+agent.set_env("PUSH_INSTALLATION_ID", PUSH_INSTALLATION_ID)
+agent.set_env("PUSH_INSTALLATION_KEY", PUSH_INSTALLATION_KEY)
+agent.set_env("PUSH_RELAY_URI", PUSH_RELAY_URI)
+agent.set_env("PUSH_IDENTITY_URI",PUSH_IDENTITY_URI)
+
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
 agent.dump_env()

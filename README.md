@@ -5,13 +5,19 @@ vaultwarden is a community-supported open-source document management system that
 
 Instantiate the module with:
 
+   ```shell
     add-module ghcr.io/compgeniuses/vaultwarden:latest 1
+   ```
 
 The output of the command will return the instance name.
 Output example:
 
     {"module_id": "vaultwarden", "image_name": "vaultwarden", "image_url": "ghcr.io/compgeniuses/vaultwarden:latest"}
+## Update Module
 
+```shell
+api-cli run update-module --data '{"module_url":"ghcr.io/compgeniuses/vaultwarden:latest","instances":["vaultwarden"],"force":true}'
+```
 ## Configure
 
 Let's assume that the vaultwarden instance is named `vaultwarden1`.
