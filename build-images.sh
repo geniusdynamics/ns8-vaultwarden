@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="vaultwarden"
-vaultwarden_version="1.31.0"
+vaultwarden_version="1.32.0"
 
 # Create a new empty container image
 container=$(buildah from scratch)
