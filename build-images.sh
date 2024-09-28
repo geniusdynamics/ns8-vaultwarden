@@ -39,7 +39,7 @@ buildah add "${container}" ui/dist /ui
 buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
-    --label="org.nethserver.rootfull=1" \
+    --label="org.nethserver.rootfull=0" \
     --label="org.nethserver.images=docker.io/vaultwarden/server:${vaultwarden_version}" \
     --label="org.nethserver.tcp-ports-demand=1" \
     "${container}"
