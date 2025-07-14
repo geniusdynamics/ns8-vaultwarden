@@ -28,15 +28,9 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/vaultwarden-app.pid \
     --pod-id-file %t/vaultwarden.pod-id --replace -d --name  vaultwarden-app \
     --volume vaultwarden-data:/data:Z \
     --env-file=smarthost.env \
+    --env-file=vaultwarden.env \
     --env=vaultwarden_* \
     --env USE_SENDMAIL=false \
-    --env ADMIN_TOKEN=${ADMIN_TOKEN} \
-    --env SMTP_HOST=${SMTP_HOST} \
-    --env SMTP_FROM=${SMTP_FROM} \
-    --env SMTP_SECURITY=${SMTP_ENCRYPTION} \
-    --env SMTP_PORT=${SMTP_PORT} \
-    --env SMTP_USERNAME=${SMTP_USERNAME} \
-    --env SMTP_PASSWORD=${SMTP_PASSWORD} \
     --env LOG_FILE=/data/vaultwarden.log \
     --env WEBSOCKET_ENABLED=true \
     ${SERVER_IMAGE}
