@@ -18,10 +18,7 @@ config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
 if os.path.exists("vaultwarden.env"):
     data = agent.read_envfile("vaultwarden.env")
-else:
-    print("vaultwarden.env not found, falling back to system environment.")
-    data = os.environ  # fallback to live environment
-
+    config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")
 
 # Unified config loading from data (either file or os.environ)
 # config["DOMAIN"] = data.get("DOMAIN", "")
@@ -56,6 +53,5 @@ else:
 # config["PUSH_IDENTITY_URI"] = data.get("PUSH_IDENTITY_URI", "")
 
 # Admin token
-config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")
 
 json.dump(config, fp=sys.stdout)
