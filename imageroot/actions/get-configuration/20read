@@ -24,37 +24,38 @@ else:
 
 
 # Unified config loading from data (either file or os.environ)
-config["DOMAIN"] = data.get("DOMAIN", "")
-config["LOGIN_RATELIMIT_MAX_BURST"] = data.get("LOGIN_RATELIMIT_MAX_BURST", "10")
-config["LOGIN_RATELIMIT_SECONDS"] = data.get("LOGIN_RATELIMIT_SECONDS", "60")
-config["ADMIN_RATELIMIT_MAX_BURST"] = data.get("ADMIN_RATELIMIT_MAX_BURST", "10")
-config["ADMIN_RATELIMIT_SECONDS"] = data.get("ADMIN_RATELIMIT_SECONDS", "60")
-
-# Boolean flags
-config["SENDS_ALLOWED"] = data.get("SENDS_ALLOWED", "false").lower() == "true"
-config["EMERGENCY_ACCESS_ALLOWED"] = (
-    data.get("EMERGENCY_ACCESS_ALLOWED", "false").lower() == "true"
-)
-config["WEB_VAULT_ENABLED"] = data.get("WEB_VAULT_ENABLED", "false").lower() == "true"
-config["SIGNUPS_ALLOWED"] = data.get("SIGNUPS_ALLOWED", "false").lower() == "true"
-config["SIGNUPS_VERIFY"] = data.get("SIGNUPS_VERIFY", "false").lower() == "true"
-config["INVITATIONS_ALLOWED"] = (
-    data.get("INVITATIONS_ALLOWED", "false").lower() == "true"
-)
-config["SHOW_PASSWORD_HINT"] = data.get("SHOW_PASSWORD_HINT", "false").lower() == "true"
-config["PUSH_ENABLED"] = data.get("PUSH_ENABLED", "false").lower() == "true"
-
-# Signup config
-config["SIGNUPS_VERIFY_RESEND_TIME"] = data.get("SIGNUPS_VERIFY_RESEND_TIME", "3600")
-config["SIGNUPS_VERIFY_RESEND_LIMIT"] = data.get("SIGNUPS_VERIFY_RESEND_LIMIT", "5")
-config["SIGNUPS_DOMAINS_WHITELIST"] = data.get("SIGNUPS_DOMAINS_WHITELIST", "")
-
-# Push config
-config["PUSH_INSTALLATION_ID"] = data.get("PUSH_INSTALLATION_ID", "")
-config["PUSH_INSTALLATION_KEY"] = data.get("PUSH_INSTALLATION_KEY", "")
-config["PUSH_RELAY_URI"] = data.get("PUSH_RELAY_URI", "")
-config["PUSH_IDENTITY_URI"] = data.get("PUSH_IDENTITY_URI", "")
+# config["DOMAIN"] = data.get("DOMAIN", "")
+# config["LOGIN_RATELIMIT_MAX_BURST"] = data.get("LOGIN_RATELIMIT_MAX_BURST", "10")
+# config["LOGIN_RATELIMIT_SECONDS"] = data.get("LOGIN_RATELIMIT_SECONDS", "60")
+# config["ADMIN_RATELIMIT_MAX_BURST"] = data.get("ADMIN_RATELIMIT_MAX_BURST", "10")
+# config["ADMIN_RATELIMIT_SECONDS"] = data.get("ADMIN_RATELIMIT_SECONDS", "60")
+#
+# # Boolean flags
+# config["SENDS_ALLOWED"] = data.get("SENDS_ALLOWED", "false").lower() == "true"
+# config["EMERGENCY_ACCESS_ALLOWED"] = (
+#     data.get("EMERGENCY_ACCESS_ALLOWED", "false").lower() == "true"
+# )
+# config["WEB_VAULT_ENABLED"] = data.get("WEB_VAULT_ENABLED", "false").lower() == "true"
+# config["SIGNUPS_ALLOWED"] = data.get("SIGNUPS_ALLOWED", "false").lower() == "true"
+# config["SIGNUPS_VERIFY"] = data.get("SIGNUPS_VERIFY", "false").lower() == "true"
+# config["INVITATIONS_ALLOWED"] = (
+#     data.get("INVITATIONS_ALLOWED", "false").lower() == "true"
+# )
+# config["SHOW_PASSWORD_HINT"] = data.get("SHOW_PASSWORD_HINT", "false").lower() == "true"
+# config["PUSH_ENABLED"] = data.get("PUSH_ENABLED", "false").lower() == "true"
+#
+# # Signup config
+# config["SIGNUPS_VERIFY_RESEND_TIME"] = data.get("SIGNUPS_VERIFY_RESEND_TIME", "3600")
+# config["SIGNUPS_VERIFY_RESEND_LIMIT"] = data.get("SIGNUPS_VERIFY_RESEND_LIMIT", "5")
+# config["SIGNUPS_DOMAINS_WHITELIST"] = data.get("SIGNUPS_DOMAINS_WHITELIST", "")
+#
+# # Push config
+# config["PUSH_INSTALLATION_ID"] = data.get("PUSH_INSTALLATION_ID", "")
+# config["PUSH_INSTALLATION_KEY"] = data.get("PUSH_INSTALLATION_KEY", "")
+# config["PUSH_RELAY_URI"] = data.get("PUSH_RELAY_URI", "")
+# config["PUSH_IDENTITY_URI"] = data.get("PUSH_IDENTITY_URI", "")
 
 # Admin token
 config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")
+
 json.dump(config, fp=sys.stdout)
