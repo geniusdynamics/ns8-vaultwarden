@@ -4,58 +4,6 @@
 # Copyright (C) 2023 Nethesis S.r.l.
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# import os  # Import the os module for operating system functionality
-# import json  # Import the json module for JSON parsing
-# import sys  # Import the sys module for system-specific parameters and functions
-# import agent  # Import the agent module for communication with the agent
-# import secrets  # Import the secrets module for generating secure random numbers
-# import pyargon2  # Import the pyargon2 module for Argon2 hashing
-# import binascii  # Import the binascii module for binary-to-text encoding and decoding
-# import subprocess  # Import the subprocess module for spawning new processes
+import agent  # Import the agent module for communication with the agent
 
-# try:
-#     import pyargon2  # Try to import pyargon2
-# except ModuleNotFoundError:
-#     print("pyargon2 not found. Attempting to install...")  # Print message indicating that pyargon2 is not found
-
-#     # Try pip install
-#     try:
-#         subprocess.run(["pip", "install", "pyargon2"], check=True)  # Try to install pyargon2 using pip
-#     except subprocess.CalledProcessError:
-#         # If pip install fails, try pip3 install
-#         try:
-#             subprocess.run(["pip3", "install", "pyargon2"], check=True)  # Try to install pyargon2 using pip3
-#         except subprocess.CalledProcessError:
-#             print("Failed to install pyargon2. Please install it manually.")  # Print message indicating installation failure
-#             sys.exit(1)  # Exit the script with a non-zero status code
-
-#     # Try importing pyargon2 again
-#     try:
-#         import pyargon2  # Try to import pyargon2 again
-#     except ModuleNotFoundError:
-#         print("pyargon2 installation successful but import still failed.")  # Print message indicating import failure
-#         sys.exit(1)  # Exit the script with a non-zero status code
-
-# # Now pyargon2 is successfully imported, continue with your script
-
-# data = json.load(sys.stdin)  # Load JSON data from stdin
-
-# # Generate a random hex string of length 40
-# def generate_random_hex(length):
-#     random_bytes = secrets.token_bytes(length)  # Generate secure random bytes
-#     random_hex = binascii.hexlify(random_bytes).decode('utf-8')  # Convert bytes to hex string
-#     return random_hex  # Return the generated hex string
-
-# # Generate a random admin token
-# VAULTWARDEN_ADMIN_TOKEN = generate_random_hex(20)
-
-# # Hash the admin token using Argon2
-# hashed_admin_token = pyargon2.hash.hash_password(VAULTWARDEN_ADMIN_TOKEN)
-
-# # Set the environment variable
-# agent.set_env("ADMIN_TOKEN", hashed_admin_token)
-
-# # Make sure everything is saved inside the environment file
-# # just before starting systemd unit
-# agent.dump_env()
-
+agent.dump_env()
