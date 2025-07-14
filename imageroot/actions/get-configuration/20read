@@ -13,28 +13,43 @@ import agent
 config = {}
 
 # Read current configuration from Redis
-config["host"] = os.getenv("TRAEFIK_HOST","")
+config["host"] = os.getenv("TRAEFIK_HOST", "")
 config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
-config["DOMAIN"] = os.getenv("DOMAIN","")
-config["LOGIN_RATELIMIT_MAX_BURST"] = os.getenv("LOGIN_RATELIMIT_MAX_BURS","10")
-config["LOGIN_RATELIMIT_SECONDS"] = os.getenv("LOGIN_RATELIMIT_SECONDS","60")
-config["ADMIN_RATELIMIT_MAX_BURST"] = os.getenv("ADMIN_RATELIMIT_MAX_BURST","10")
-config["ADMIN_RATELIMIT_SECONDS"] = os.getenv("ADMIN_RATELIMIT_SECONDS","60")
-config["SENDS_ALLOWED"] = os.getenv("SENDS_ALLOWED") == "True"
-config["EMERGENCY_ACCESS_ALLOWED"] = os.getenv("EMERGENCY_ACCESS_ALLOWED") == "True"
-config["WEB_VAULT_ENABLED"] = os.getenv("WEB_VAULT_ENABLED") == "True"
-config["SIGNUPS_ALLOWED"] = os.getenv("SIGNUPS_ALLOWED") == "False"
-config["SIGNUPS_VERIFY"] = os.getenv("SIGNUPS_VERIFY") == "False"
-config["SIGNUPS_VERIFY_RESEND_TIME"] = os.getenv("SIGNUPS_VERIFY_RESEND_TIME","3600")
-config["SIGNUPS_VERIFY_RESEND_LIMIT"] = os.getenv("SIGNUPS_VERIFY_RESEND_LIMIT","5")
-config["SIGNUPS_DOMAINS_WHITELIST"] = os.getenv("SIGNUPS_DOMAINS_WHITELIST","")
-config["INVITATIONS_ALLOWED"] = os.getenv("INVITATIONS_ALLOWED") == "False"
-config["SHOW_PASSWORD_HINT"] = os.getenv("SHOW_PASSWORD_HINT") == "False"
-config["PUSH_ENABLED"] = os.getenv("PUSH_ENABLED") == "False"
-config["PUSH_INSTALLATION_ID"] = os.getenv("PUSH_INSTALLATION_ID","")
-config["PUSH_INSTALLATION_KEY"] = os.getenv("PUSH_INSTALLATION_KEY","")
-config["PUSH_RELAY_URI"] = os.getenv("PUSH_RELAY_URI","")
-config["PUSH_IDENTITY_URI"] = os.getenv("PUSH_IDENTITY_URI","")
-config["ADMIN_TOKEN"] = os.getenv("VAULTWARDEN_ADMIN_TOKEN","")
-json.dump(config, fp=sys.stdout)
+if os.path.exists("vaultwarden.env"):
+    data = agent.read_envfile("vaultwarden.env")
+else:
+    print("vaultwarden.env not found, falling back to system environment.")
+    data = os.environ  # fallback to live environment
+
+
+# Unified config loading from data (either file or os.environ)
+config["DOMAIN"] = data.get("DOMAIN", "")
+config["LOGIN_RATELIMIT_MAX_BURST"] = data.get("LOGIN_RATELIMIT_MAX_BURST", "10")
+config["LOGIN_RATELIMIT_SECONDS"] = data.get("LOGIN_RATELIMIT_SECONDS", "60")
+config["ADMIN_RATELIMIT_MAX_BURST"] = data.get("ADMIN_RATELIMIT_MAX_BURST", "10")
+config["ADMIN_RATELIMIT_SECONDS"] = data.get("ADMIN_RATELIMIT_SECONDS", "60")
+
+# Boolean flags
+config["SENDS_ALLOWED"] = data.get("SENDS_ALLOWED", "false").lower() == "true"
+config["EMERGENCY_ACCESS_ALLOWED"] = data.get("EMERGENCY_ACCESS_ALLOWED", "false").lower() == "true"
+config["WEB_VAULT_ENABLED"] = data.get("WEB_VAULT_ENABLED", "false").lower() == "true"
+config["SIGNUPS_ALLOWED"] = data.get("SIGNUPS_ALLOWED", "false").lower() == "true"
+config["SIGNUPS_VERIFY"] = data.get("SIGNUPS_VERIFY", "false").lower() == "true"
+config["INVITATIONS_ALLOWED"] = data.get("INVITATIONS_ALLOWED", "false").lower() == "true"
+config["SHOW_PASSWORD_HINT"] = data.get("SHOW_PASSWORD_HINT", "false").lower() == "true"
+config["PUSH_ENABLED"] = data.get("PUSH_ENABLED", "false").lower() == "true"
+
+# Signup config
+config["SIGNUPS_VERIFY_RESEND_TIME"] = data.get("SIGNUPS_VERIFY_RESEND_TIME", "3600")
+config["SIGNUPS_VERIFY_RESEND_LIMIT"] = data.get("SIGNUPS_VERIFY_RESEND_LIMIT", "5")
+config["SIGNUPS_DOMAINS_WHITELIST"] = data.get("SIGNUPS_DOMAINS_WHITELIST", "")
+
+# Push config
+config["PUSH_INSTALLATION_ID"] = data.get("PUSH_INSTALLATION_ID", "")
+config["PUSH_INSTALLATION_KEY"] = data.get("PUSH_INSTALLATION_KEY", "")
+config["PUSH_RELAY_URI"] = data.get("PUSH_RELAY_URI", "")
+config["PUSH_IDENTITY_URI"] = data.get("PUSH_IDENTITY_URI", "")
+
+# Admin token
+config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")json.dump(config, fp=sys.stdout)

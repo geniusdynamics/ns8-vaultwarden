@@ -7,25 +7,32 @@
 import os
 import json
 import sys
+from argon2 import PasswordHasher
+
 # agent is a NethServer library which provides function to communicate with the agent
 import agent
 
 data = json.load(sys.stdin)
+VAULTWARDEN_ADMIN_TOKEN = data.get("ADMIN_TOKEN", "")
 
+
+# Create a PasswordHasher object with the desired parameters
+ph = PasswordHasher(
+    time_cost=3, memory_cost=65540, parallelism=4, hash_len=32, salt_len=16
+)
+
+# Generate a random salt
+salt = os.urandom(32)
+
+# Hash the password
+hashed_admin_token = ph.hash(VAULTWARDEN_ADMIN_TOKEN, salt=salt)
 
 # vaultwarden domain settings
 host = data.get("host", "")
-DOMAIN = "https://"+host
+DOMAIN = "https://" + host
 # Testing SMTP Settings on Enviroment
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
-agent.set_env("SMTP_HOST", smtp_settings['host'])
-agent.set_env("SMTP_PORT", smtp_settings['port'])
-agent.set_env("SMTP_USERNAME", smtp_settings['username'])
-agent.set_env("SMTP_PASSWORD", smtp_settings['password'])
-agent.set_env("SMTP_ENCRYPTION", smtp_settings['encrypt_smtp'])
-agent.set_env("SMTP_FROM", smtp_settings['username'])
-
 # Define missing variables
 SENDS_ALLOWED = data.get("SENDS_ALLOWED", "")
 EMERGENCY_ACCESS_ALLOWED = data.get("EMERGENCY_ACCESS_ALLOWED", "")
@@ -42,30 +49,39 @@ PUSH_IDENTITY_URI = data.get("PUSH_IDENTITY_URI", "")
 PUSH_INSTALLATION_ID = data.get("PUSH_INSTALLATION_ID", "")
 PUSH_INSTALLATION_KEY = data.get("PUSH_INSTALLATION_KEY", "")
 SHOW_PASSWORD_HINT = data.get("SHOW_PASSWORD_HINT", "")
+app = {
+    "DOMAIN": DOMAIN,
+    "SENDS_ALLOWED": SENDS_ALLOWED,
+    "EMERGENCY_ACCESS_ALLOWED": EMERGENCY_ACCESS_ALLOWED,
+    "WEB_VAULT_ENABLED": WEB_VAULT_ENABLED,
+    "SIGNUPS_ALLOWED": SIGNUPS_ALLOWED,
+    "SIGNUPS_VERIFY": SIGNUPS_VERIFY,
+    "SIGNUPS_VERIFY_RESEND_TIME": SIGNUPS_VERIFY_RESEND_TIME,
+    "SIGNUPS_VERIFY_RESEND_LIMIT": SIGNUPS_VERIFY_RESEND_LIMIT,
+    "SIGNUPS_DOMAINS_WHITELIST": SIGNUPS_DOMAINS_WHITELIST,
+    "INVITATIONS_ALLOWED": INVITATIONS_ALLOWED,
+    "LOGIN_RATELIMIT_MAX_BURST": "10",
+    "LOGIN_RATELIMIT_SECONDS": "60",
+    "ADMIN_RATELIMIT_MAX_BURST": "10",
+    "ADMIN_RATELIMIT_SECONDS": "60",
+    "SHOW_PASSWORD_HINT": SHOW_PASSWORD_HINT,
+    "PUSH_ENABLED": PUSH_ENABLED,
+    "PUSH_INSTALLATION_ID": PUSH_INSTALLATION_ID,
+    "PUSH_INSTALLATION_KEY": PUSH_INSTALLATION_KEY,
+    "PUSH_RELAY_URI": PUSH_RELAY_URI,
+    "PUSH_IDENTITY_URI": PUSH_IDENTITY_URI,
+    "SMTP_HOST": smtp_settings["host"],
+    "SMTP_PORT": smtp_settings["port"],
+    "SMTP_USERNAME": smtp_settings["username"],
+    "SMTP_PASSWORD": smtp_settings["password"],
+    "SMTP_ENCRYPTION": smtp_settings["encrypt_smtp"],
+    "SMTP_FROM": smtp_settings["username"],
+    "ADMIN_TOKEN": hashed_admin_token,
+}
 
-# Setup configuration from user input.
-agent.set_env("DOMAIN", DOMAIN)
-agent.set_env("SENDS_ALLOWED", SENDS_ALLOWED)
-agent.set_env("EMERGENCY_ACCESS_ALLOWED", EMERGENCY_ACCESS_ALLOWED)
-agent.set_env("WEB_VAULT_ENABLED", WEB_VAULT_ENABLED)
-agent.set_env("SIGNUPS_ALLOWED", SIGNUPS_ALLOWED)
-agent.set_env("SIGNUPS_VERIFY", SIGNUPS_VERIFY)
-agent.set_env("SIGNUPS_VERIFY_RESEND_TIME", SIGNUPS_VERIFY_RESEND_TIME)
-agent.set_env("SIGNUPS_VERIFY_RESEND_LIMIT", SIGNUPS_VERIFY_RESEND_LIMIT)
-agent.set_env("SIGNUPS_DOMAINS_WHITELIST", SIGNUPS_DOMAINS_WHITELIST)
-agent.set_env("INVITATIONS_ALLOWED", INVITATIONS_ALLOWED)
-# other defaults
-agent.set_env("LOGIN_RATELIMIT_MAX_BURST", "10")
-agent.set_env("LOGIN_RATELIMIT_SECONDS", "60")
-agent.set_env("ADMIN_RATELIMIT_MAX_BURST", "10")
-agent.set_env("ADMIN_RATELIMIT_SECONDS", "60")
-# push
-agent.set_env("SHOW_PASSWORD_HINT", SHOW_PASSWORD_HINT)
-agent.set_env("PUSH_ENABLED", PUSH_ENABLED)
-agent.set_env("PUSH_INSTALLATION_ID", PUSH_INSTALLATION_ID)
-agent.set_env("PUSH_INSTALLATION_KEY", PUSH_INSTALLATION_KEY)
-agent.set_env("PUSH_RELAY_URI", PUSH_RELAY_URI)
-agent.set_env("PUSH_IDENTITY_URI",PUSH_IDENTITY_URI)
+# Write everything into the env file at once
+agent.write_envfile("vaultwarden.env", app)
+
 
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
