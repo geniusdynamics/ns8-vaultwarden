@@ -77,6 +77,7 @@ app = {
     "SMTP_ENCRYPTION": smtp_settings["encrypt_smtp"],
     "SMTP_FROM": smtp_settings["username"],
     "ADMIN_TOKEN": hashed_admin_token,
+    "ADMIN_TOKEN_UNHASHED": VAULTWARDEN_ADMIN_TOKEN,
 }
 
 # Write everything into the env file at once

@@ -19,6 +19,7 @@ config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
 if os.path.exists("vaultwarden.env"):
     data = agent.read_envfile("vaultwarden.env")
     config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")
+    config["ADMIN_TOKEN_UNHASHED"] = data.get("ADMIN_TOKEN_UNHASHED", "")
 
 # Unified config loading from data (either file or os.environ)
 # config["DOMAIN"] = data.get("DOMAIN", "")
