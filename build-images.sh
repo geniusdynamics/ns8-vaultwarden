@@ -14,35 +14,35 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="vaultwarden"
-vaultwarden_version="1.30.5"
+vaultwarden_version="1.34.1"
 
 # Create a new empty container image
 container=$(buildah from scratch)
 
 # Reuse existing nodebuilder-kickstart container, to speed up builds
 if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-vaultwarden; then
-    echo "Pulling NodeJS runtime..."
-    buildah from --name nodebuilder-vaultwarden -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+	echo "Pulling NodeJS runtime..."
+	buildah from --name nodebuilder-vaultwarden -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
 fi
 
 echo "Build static UI files with node..."
 buildah run \
-    --workingdir=/usr/src/ui \
-    --env="NODE_OPTIONS=--openssl-legacy-provider" \
-    nodebuilder-vaultwarden \
-    sh -c "yarn install && yarn build"
+	--workingdir=/usr/src/ui \
+	--env="NODE_OPTIONS=--openssl-legacy-provider" \
+	nodebuilder-vaultwarden \
+	sh -c "yarn install && yarn build"
 
 # Add imageroot directory to the container image
 buildah add "${container}" imageroot /imageroot
 buildah add "${container}" ui/dist /ui
 # Setup the entrypoint, ask to reserve one TCP port with the label and set a rootless container
 buildah config --entrypoint=/ \
-    --label="org.nethserver.authorizations=traefik@node:routeadm" \
-    --label="org.nethserver.tcp-ports-demand=1" \
-    --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/vaultwarden/server:${vaultwarden_version}" \
-    --label="org.nethserver.tcp-ports-demand=1" \
-    "${container}"
+	--label="org.nethserver.authorizations=traefik@node:routeadm" \
+	--label="org.nethserver.tcp-ports-demand=1" \
+	--label="org.nethserver.rootfull=0" \
+	--label="org.nethserver.images=docker.io/vaultwarden/server:${vaultwarden_version}" \
+	--label="org.nethserver.tcp-ports-demand=1" \
+	"${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
 
@@ -60,14 +60,14 @@ images+=("${repobase}/${reponame}")
 #
 
 #
-# Setup CI when pushing to Github. 
+# Setup CI when pushing to Github.
 # Warning! docker::// protocol expects lowercase letters (,,)
 if [[ -n "${CI}" ]]; then
-    # Set output value for Github Actions
-    printf "images=%s\n" "${images[*],,}" >> "${GITHUB_OUTPUT}"
+	# Set output value for Github Actions
+	printf "images=%s\n" "${images[*],,}" >>"${GITHUB_OUTPUT}"
 else
-    # Just print info for manual push
-    printf "Publish the images with:\n\n"
-    for image in "${images[@],,}"; do printf "  buildah push %s docker://%s:%s\n" "${image}" "${image}" "${IMAGETAG:-latest}" ; done
-    printf "\n"
+	# Just print info for manual push
+	printf "Publish the images with:\n\n"
+	for image in "${images[@],,}"; do printf "  buildah push %s docker://%s:%s\n" "${image}" "${image}" "${IMAGETAG:-latest}"; done
+	printf "\n"
 fi
