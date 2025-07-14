@@ -32,11 +32,15 @@ config["ADMIN_RATELIMIT_SECONDS"] = data.get("ADMIN_RATELIMIT_SECONDS", "60")
 
 # Boolean flags
 config["SENDS_ALLOWED"] = data.get("SENDS_ALLOWED", "false").lower() == "true"
-config["EMERGENCY_ACCESS_ALLOWED"] = data.get("EMERGENCY_ACCESS_ALLOWED", "false").lower() == "true"
+config["EMERGENCY_ACCESS_ALLOWED"] = (
+    data.get("EMERGENCY_ACCESS_ALLOWED", "false").lower() == "true"
+)
 config["WEB_VAULT_ENABLED"] = data.get("WEB_VAULT_ENABLED", "false").lower() == "true"
 config["SIGNUPS_ALLOWED"] = data.get("SIGNUPS_ALLOWED", "false").lower() == "true"
 config["SIGNUPS_VERIFY"] = data.get("SIGNUPS_VERIFY", "false").lower() == "true"
-config["INVITATIONS_ALLOWED"] = data.get("INVITATIONS_ALLOWED", "false").lower() == "true"
+config["INVITATIONS_ALLOWED"] = (
+    data.get("INVITATIONS_ALLOWED", "false").lower() == "true"
+)
 config["SHOW_PASSWORD_HINT"] = data.get("SHOW_PASSWORD_HINT", "false").lower() == "true"
 config["PUSH_ENABLED"] = data.get("PUSH_ENABLED", "false").lower() == "true"
 
@@ -52,4 +56,5 @@ config["PUSH_RELAY_URI"] = data.get("PUSH_RELAY_URI", "")
 config["PUSH_IDENTITY_URI"] = data.get("PUSH_IDENTITY_URI", "")
 
 # Admin token
-config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")json.dump(config, fp=sys.stdout)
+config["ADMIN_TOKEN"] = data.get("ADMIN_TOKEN", "")
+json.dump(config, fp=sys.stdout)
