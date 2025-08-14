@@ -1,23 +1,26 @@
 # ns8-vaultwarden
+
 vaultwarden is a community-supported open-source document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper.
 
 ## Install
 
 Instantiate the module with:
 
-   ```shell
-    add-module ghcr.io/compgeniuses/vaultwarden:latest 1
-   ```
+```shell
+ add-module ghcr.io/geniusdynamics/vaultwarden:latest 1
+```
 
 The output of the command will return the instance name.
 Output example:
 
-    {"module_id": "vaultwarden", "image_name": "vaultwarden", "image_url": "ghcr.io/compgeniuses/vaultwarden:latest"}
+    {"module_id": "vaultwarden", "image_name": "vaultwarden", "image_url": "ghcr.io/geniusdynamics/vaultwarden:latest"}
+
 ## Update Module
 
 ```shell
-api-cli run update-module --data '{"module_url":"ghcr.io/compgeniuses/vaultwarden:latest","instances":["vaultwarden"],"force":true}'
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/vaultwarden:latest","instances":["vaultwarden"],"force":true}'
 ```
+
 ## Configure
 
 Let's assume that the vaultwarden instance is named `vaultwarden1`.
@@ -55,7 +58,7 @@ Example:
 
     api-cli run module/vaultwarden1/configure-module --data '{"host": "vaultwarden.domain.com"}'
 
-    or if modifying another value: 
+    or if modifying another value:
 
     api-cli run module/vaultwarden5/configure-module --data '{"host": "vaultwarden.domain.com","vaultwarden_name": "Myvaultwarden"}'
 
@@ -69,8 +72,8 @@ Example:
         "ADMIN_TOKEN":"YourReallyStrongAdminTokenHere"
     }'
 
-
 The above command will:
+
 - start and configure the vaultwarden instance
 - (describe configuration process)
 - ...
@@ -87,7 +90,7 @@ Send a test HTTP request to the vaultwarden backend service:
 
 Some configuration settings, like the smarthost setup, are not part of the
 `configure-module` action input: they are discovered by looking at some
-Redis keys.  To ensure the module is always up-to-date with the
+Redis keys. To ensure the module is always up-to-date with the
 centralized [smarthost
 setup](https://nethserver.github.io/ns8-core/core/smarthost/) every time
 kickstart starts, the command `bin/discover-smarthost` runs and refreshes
@@ -111,7 +114,6 @@ To uninstall the instance:
 ## Testing
 
 Test the module using the `test-module.sh` script:
-
 
     ./test-module.sh <NODE_ADDR> ghcr.io/nethserver/vaultwarden:latest
 

@@ -28,9 +28,24 @@ def install_argon2():
         )
         print("✅ argon2-cffi installed successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"❌ Error occurred while installing argon2-cffi: {e}")
+        print(f"❌ Failed to install argon2-cffi: {e}")
+        sys.exit(1)
 
 
-# Upgrade pip first, then install
-upgrade_pip()
-install_argon2()
+# Try importing first
+try:
+    from argon2 import PasswordHasher
+
+    print("✅ argon2-cffi is already installed.")
+except ImportError:
+    print("📦 argon2-cffi not found. Installing...")
+    upgrade_pip()
+    install_argon2()
+    # Retry import after installation
+    try:
+        from argon2 import PasswordHasher
+
+        print("✅ argon2-cffi import successful after installation.")
+    except ImportError:
+        print("❌ Still unable to import argon2-cffi after installation.")
+        sys.exit(1)
