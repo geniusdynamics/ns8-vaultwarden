@@ -1,147 +1,220 @@
-# ns8-vaultwarden
+# NS8 Vaultwarden Module
 
-vaultwarden is a community-supported open-source document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Docker Image](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com)
 
-## Install
+A [NethServer 8](https://nethserver.github.io/ns8-core/) module that provides [Vaultwarden](https://github.com/dani-garcia/vaultwarden) - an alternative implementation of the Bitwarden server API written in Rust. This is perfect for self-hosted password management where running the official resource-heavy service might not be ideal.
 
-Instantiate the module with:
+## ✨ Features
 
-```shell
- add-module ghcr.io/geniusdynamics/vaultwarden:latest 1
+- **Complete Bitwarden API compatibility** - Works with all Bitwarden clients
+- **Lightweight and fast** - Written in Rust, much more efficient than the official server
+- **Self-hosted security** - Keep your passwords under your control
+- **Modern web interface** - Clean, responsive UI built with Vue.js and Carbon Design System
+- **Multi-language support** - Available in multiple languages via Weblate
+- **Easy integration** - Seamless integration with NethServer 8 ecosystem
+- **Automated testing** - Comprehensive test suite with Robot Framework
+- **Containerized deployment** - Easy to deploy and manage
+
+## 🚀 Quick Start
+
+### Installation
+
+1. **Add the module to your NethServer 8 cluster:**
+
+   ```bash
+   add-module ghcr.io/compgeniuses/vaultwarden:latest 1
+   ```
+
+2. **Configure the module:**
+
+   ```bash
+   api-cli run module/vaultwarden1/configure-module --data '{
+     "host": "vaultwarden.yourdomain.com",
+     "lets_encrypt": true,
+     "http2https": true
+   }'
+   ```
+
+3. **Access your Vaultwarden instance** at `https://vaultwarden.yourdomain.com`
+
+### Basic Configuration
+
+The module supports extensive configuration options:
+
+```bash
+api-cli run module/vaultwarden1/configure-module --data '{
+  "host": "vaultwarden.yourdomain.com",
+  "lets_encrypt": true,
+  "http2https": true,
+  "WEB_VAULT_ENABLED": true,
+  "SIGNUPS_ALLOWED": false,
+  "SIGNUPS_VERIFY": true,
+  "SIGNUPS_DOMAINS_WHITELIST": "yourdomain.com",
+  "ADMIN_TOKEN": "your-secure-admin-token",
+  "SMTP_HOST": "smtp.yourdomain.com",
+  "SMTP_FROM": "vaultwarden@yourdomain.com"
+}'
 ```
 
-The output of the command will return the instance name.
-Output example:
+## 📋 Configuration Parameters
 
-    {"module_id": "vaultwarden", "image_name": "vaultwarden", "image_url": "ghcr.io/geniusdynamics/vaultwarden:latest"}
+### Required Parameters
 
-## Update Module
+- `host` - Domain name for the Vaultwarden instance
+- `lets_encrypt` - Enable Let's Encrypt SSL certificate
+- `http2https` - Redirect HTTP to HTTPS
 
-```shell
-api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/vaultwarden:latest","instances":["vaultwarden"],"force":true}'
+### Optional Parameters
+
+- `WEB_VAULT_ENABLED` - Enable web vault interface (default: true)
+- `SIGNUPS_ALLOWED` - Allow new user registrations (default: false)
+- `SIGNUPS_VERIFY` - Require email verification for new accounts
+- `SIGNUPS_DOMAINS_WHITELIST` - Comma-separated list of allowed domains
+- `ADMIN_TOKEN` - Admin token for server management
+- `SMTP_HOST` - SMTP server hostname
+- `SMTP_FROM` - From email address for notifications
+- `LOGIN_RATELIMIT_MAX_BURST` - Login rate limit burst (default: 10)
+- `LOGIN_RATELIMIT_SECONDS` - Login rate limit window (default: 60)
+- `EMERGENCY_ACCESS_ALLOWED` - Enable emergency access feature
+
+For a complete list of configuration options, see the [Vaultwarden Wiki](https://github.com/dani-garcia/vaultwarden/wiki).
+
+## 🔧 Management Commands
+
+### Update Module
+
+```bash
+api-cli run update-module --data '{"module_url":"ghcr.io/compgeniuses/vaultwarden:latest","instances":["vaultwarden1"],"force":true}'
 ```
 
-## Configure
+### Test Installation
 
-Let's assume that the vaultwarden instance is named `vaultwarden1`.
+```bash
+curl http://127.0.0.1/vaultwarden/
+```
 
-Launch `configure-module`, by setting the following parameters:
+### Remove Module
 
-- `LOGIN_RATELIMIT_MAX_BURST`: 10
-- `LOGIN_RATELIMIT_SECONDS`: 60
-- `ADMIN_RATELIMIT_MAX_BURST`: 10
-- `ADMIN_RATELIMIT_SECONDS`: 60
-- `ADMIN_TOKEN`: YourReallyStrongAdminTokenHere
-- `SENDS_ALLOWED`: true
-- `EMERGENCY_ACCESS_ALLOWED`: true
-- `WEB_VAULT_ENABLED`: true
-- `SIGNUPS_ALLOWED`: false
-- `SIGNUPS_VERIFY`: true
-- `SIGNUPS_VERIFY_RESEND_TIME`: 3600
-- `SIGNUPS_VERIFY_RESEND_LIMIT`: 5
-- `SIGNUPS_DOMAINS_WHITELIST`: yourdomainhere.com,anotherdomain.com
-- `SMTP_HOST`: smtp.youremaildomain.com
-- `SMTP_FROM`: vaultwarden@youremaildomain.com
-- `SMTP_FROM_NAME`: Vaultwarden
-- `SMTP_SECURITY`: SECURITYMETHOD
-- `SMTP_PORT`: XXXX
-- `SMTP_USERNAME`: vaultwarden@youremaildomain.com
-- `SMTP_PASSWORD`: YourReallyStrongPasswordHere
-- `SMTP_AUTH_MECHANISM`: "Mechanism"
-- `lets_encrypt`: Set LEtsecnrypt to True or False, Default is FALSE
-- `http2https`: set redirect to True or False, Default is True
-- `host`: the traefik host url for the will be DOMAIN=https://vaultwarden.yourdomain.com
+```bash
+remove-module --no-preserve vaultwarden1
+```
 
-- ...
+## 🧪 Testing
 
-Example:
+Run the automated test suite:
 
-    api-cli run module/vaultwarden1/configure-module --data '{"host": "vaultwarden.domain.com"}'
+```bash
+./test-module.sh <NODE_ADDR> ghcr.io/compgeniuses/vaultwarden:latest
+```
 
-    or if modifying another value:
+Tests are implemented using [Robot Framework](https://robotframework.org/) and cover:
 
-    api-cli run module/vaultwarden5/configure-module --data '{"host": "vaultwarden.domain.com","vaultwarden_name": "Myvaultwarden"}'
+- Module installation and configuration
+- Service availability and functionality
+- Basic API endpoint validation
 
-    api-cli run module/vaultwarden1/configure-module --data '{
-        "host": "papperles.rocky9-pve2.org",
-        "lets_encrypt": false,
-        "http2https": true,
-        "WEB_VAULT_ENABLED": true,
-        "SIGNUPS_ALLOWED": fales,
-        "SIGNUPS_DOMAINS_WHITELIST":"yourdomainhere.com,anotherdomain.com",
-        "ADMIN_TOKEN":"YourReallyStrongAdminTokenHere"
-    }'
+## 🌐 Internationalization
 
-The above command will:
+The UI supports multiple languages and is translated via [Weblate](https://hosted.weblate.org/projects/ns8/):
 
-- start and configure the vaultwarden instance
-- (describe configuration process)
-- ...
+- English (en)
+- Spanish (es)
+- Italian (it)
+- German (de)
+- Basque (eu)
 
-Additional Parameters are Described here:
-https://github.com/dani-garcia/vaultwarden/wiki
-WHile they have not been Implemented, if you require more parameters to be defined, kindly free to raise an issue, and define why and how that parameter should be implemented for use
+To contribute translations:
 
-Send a test HTTP request to the vaultwarden backend service:
+1. Visit the [NS8 Weblate project](https://hosted.weblate.org/projects/ns8/)
+2. Find the Vaultwarden component
+3. Submit your translations
 
-    curl http://127.0.0.1/vaultwarden/
+## 🏗️ Architecture
 
-## Smarthost setting discovery
+### File Structure
 
-Some configuration settings, like the smarthost setup, are not part of the
-`configure-module` action input: they are discovered by looking at some
-Redis keys. To ensure the module is always up-to-date with the
-centralized [smarthost
-setup](https://nethserver.github.io/ns8-core/core/smarthost/) every time
-kickstart starts, the command `bin/discover-smarthost` runs and refreshes
-the `state/smarthost.env` file with fresh values from Redis.
+```
+├── imageroot/           # Container image root
+│   ├── actions/         # Module actions (configure, create, destroy)
+│   ├── bin/            # Utility scripts
+│   ├── etc/            # Configuration files
+│   ├── events/         # Event handlers
+│   └── systemd/        # Systemd service definitions
+├── ui/                 # Vue.js frontend application
+│   ├── public/         # Static assets and metadata
+│   ├── src/            # Vue.js source code
+│   └── dist/           # Built frontend assets
+├── tests/              # Robot Framework tests
+└── build-images.sh     # Build script
+```
 
-Furthermore if smarthost setup is changed when vaultwarden is already
-running, the event handler `events/smarthost-changed/10reload_services`
-restarts the main module service.
+## 🔒 Security Features
 
-See also the `systemd/user/vaultwarden-server.service` file.
+- **Rate limiting** - Built-in protection against brute force attacks
+- **Admin token authentication** - Secure admin access
+- **Domain whitelisting** - Control who can register
+- **Email verification** - Prevent spam registrations
+- **Emergency access** - Account recovery mechanisms
+- **Encrypted data storage** - All sensitive data is encrypted at rest
 
-This setting discovery is just an example to understand how the module is
-expected to work: it can be rewritten or discarded completely.
+## 🚀 Building from Source
 
-## Uninstall
+## 🤝 Contributing
 
-To uninstall the instance:
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-    remove-module --no-preserve vaultwarden1
+### Areas for Contribution
 
-## Testing
+- [ ] LDAP/AD integration
+- [ ] SSO implementation
+- [ ] Additional language translations
+- [ ] Performance optimizations
+- [ ] Security enhancements
+- [ ] Documentation improvements
 
-Test the module using the `test-module.sh` script:
+## 📝 Roadmap
 
-    ./test-module.sh <NODE_ADDR> ghcr.io/nethserver/vaultwarden:latest
+### Planned Features
 
-The tests are made using [Robot Framework](https://robotframework.org/)
+- **LDAP Integration** - Active Directory and LDAP authentication
+- **SSO Support** - Single Sign-On capabilities
+- **Advanced Backup** - Automated backup and restore functionality
+- **Metrics & Monitoring** - Integration with monitoring systems
+- **Mobile App Support** - Enhanced mobile client compatibility
 
-## UI translation
+### Future Enhancements
 
-Translated with [Weblate](https://hosted.weblate.org/projects/ns8/).
+- Kubernetes deployment support
+- High availability configuration
+- Advanced audit logging
+- API rate limiting customization
+- Custom branding options
 
-To setup the translation process:
+## 🐛 Bug Reports & Support
 
-- add [GitHub Weblate app](https://docs.weblate.org/en/latest/admin/continuous.html#github-setup) to your repository
-- add your repository to [hosted.weblate.org]((https://hosted.weblate.org) or ask a NethServer developer to add it to ns8 Weblate project
+- **Bug Reports**: [GitHub Issues](https://github.com/compgeniuses/ns8-vaultwarden/issues)
+- **Documentation**: [Vaultwarden Wiki](https://github.com/dani-garcia/vaultwarden/wiki)
+- **Community**: [NethServer Forum](https://community.nethserver.org/)
 
-## To Do
+## 📄 License
 
-Implement Ldap Sync using these modules
-https://hub.docker.com/r/vividboarder/vaultwarden_ldap
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
-it includes alot of parameters
+## 🙏 Acknowledgments
 
-if not implemented we could use this
+- [Vaultwarden](https://github.com/dani-garcia/vaultwarden) - The core password management server
+- [NethServer](https://nethserver.org/) - The hosting platform
+- [Bitwarden](https://bitwarden.com/) - The original API specification
+- [Carbon Design System](https://carbondesignsystem.com/) - UI design system
+- [Weblate](https://weblate.org/) - Translation management
 
-https://github.com/bitwarden/directory-connector
+## 📞 Contact
 
-this docker image seems to pre-implement SSO https://github.com/Timshel/vaultwarden/pkgs/container/vaultwarden
+- **Project Maintainers**: Martin Bhuong, Kemboi Elvis
+- **Email**: martin@genius.ke, kemboielvis@genius.ke
+- **GitHub**: [@compgeniuses](https://github.com/compgeniuses)
 
-Also this pre-implemnts SSO: https://hub.docker.com/r/oidcwarden/vaultwarden-oidc/tags
+---
 
-SSO PR seemed to be in the worsk here as well: https://github.com/dani-garcia/vaultwarden/pull/3899
-so would be rebased, once its ready
+_Built with ❤️ for the NethServer community_
