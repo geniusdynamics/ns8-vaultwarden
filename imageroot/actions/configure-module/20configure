@@ -17,15 +17,13 @@ VAULTWARDEN_ADMIN_TOKEN = data.get("ADMIN_TOKEN", "")
 
 
 # Create a PasswordHasher object with the desired parameters
-ph = PasswordHasher(
-    time_cost=3, memory_cost=65540, parallelism=4, hash_len=32, salt_len=16
-)
-
-# Generate a random salt
-salt = os.urandom(32)
-
-# Hash the password
-hashed_admin_token = ph.hash(VAULTWARDEN_ADMIN_TOKEN)
+if VAULTWARDEN_ADMIN_TOKEN.startswith("$argon2"):
+    hashed_admin_token = VAULTWARDEN_ADMIN_TOKEN
+else:
+    ph = PasswordHasher(
+        time_cost=3, memory_cost=65540, parallelism=4, hash_len=32, salt_len=16
+    )
+    hashed_admin_token = ph.hash(VAULTWARDEN_ADMIN_TOKEN)
 
 # vaultwarden domain settings
 host = data.get("host", "")
