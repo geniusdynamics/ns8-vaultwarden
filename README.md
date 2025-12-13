@@ -16,6 +16,21 @@ A [NethServer 8](https://nethserver.github.io/ns8-core/) module that provides [V
 - **Automated testing** - Comprehensive test suite with Robot Framework
 - **Containerized deployment** - Easy to deploy and manage
 
+## 📋 Prerequisites
+
+Before installing this module, ensure you have the following dependencies:
+
+- **Python and pip** - Required for package management:
+  ```bash
+  # Install pip if not already present
+  python3 -m ensurepip --upgrade
+  ```
+- **argon2-cffi** - Required for password hashing:
+  ```bash
+  # Install argon2-cffi package
+  pip install argon2-cffi
+  ```
+
 ## 🚀 Quick Start
 
 ### Installation
@@ -23,7 +38,7 @@ A [NethServer 8](https://nethserver.github.io/ns8-core/) module that provides [V
 1. **Add the module to your NethServer 8 cluster:**
 
    ```bash
-   add-module ghcr.io/compgeniuses/vaultwarden:latest 1
+   add-module ghcr.io/geniusdynamics/vaultwarden:latest 1
    ```
 
 2. **Configure the module:**
@@ -85,7 +100,7 @@ For a complete list of configuration options, see the [Vaultwarden Wiki](https:/
 ### Update Module
 
 ```bash
-api-cli run update-module --data '{"module_url":"ghcr.io/compgeniuses/vaultwarden:latest","instances":["vaultwarden1"],"force":true}'
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/vaultwarden:latest","instances":["vaultwarden1"],"force":true}'
 ```
 
 ### Test Installation
@@ -105,7 +120,7 @@ remove-module --no-preserve vaultwarden1
 Run the automated test suite:
 
 ```bash
-./test-module.sh <NODE_ADDR> ghcr.io/compgeniuses/vaultwarden:latest
+./test-module.sh <NODE_ADDR> ghcr.io/geniusdynamics/vaultwarden:latest
 ```
 
 Tests are implemented using [Robot Framework](https://robotframework.org/) and cover:
@@ -193,7 +208,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## 🐛 Bug Reports & Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/compgeniuses/ns8-vaultwarden/issues)
+- **Bug Reports**: [GitHub Issues](https://github.com/geniusdynamics/ns8-vaultwarden/issues)
 - **Documentation**: [Vaultwarden Wiki](https://github.com/dani-garcia/vaultwarden/wiki)
 - **Community**: [NethServer Forum](https://community.nethserver.org/)
 
@@ -213,7 +228,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 - **Project Maintainers**: Martin Bhuong, Kemboi Elvis
 - **Email**: martin@genius.ke, kemboielvis@genius.ke
-- **GitHub**: [@compgeniuses](https://github.com/compgeniuses)
+- **GitHub**: [@geniusdynamics](https://github.com/geniusdynamics)
 
 ---
 
