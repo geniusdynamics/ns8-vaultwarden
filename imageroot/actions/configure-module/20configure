@@ -7,23 +7,13 @@
 import os
 import json
 import sys
-from argon2 import PasswordHasher
 
 # agent is a NethServer library which provides function to communicate with the agent
 import agent
 
 data = json.load(sys.stdin)
 VAULTWARDEN_ADMIN_TOKEN = data.get("ADMIN_TOKEN", "")
-
-
-# Create a PasswordHasher object with the desired parameters
-if VAULTWARDEN_ADMIN_TOKEN.startswith("$argon2"):
-    hashed_admin_token = VAULTWARDEN_ADMIN_TOKEN
-else:
-    ph = PasswordHasher(
-        time_cost=3, memory_cost=65540, parallelism=4, hash_len=32, salt_len=16
-    )
-    hashed_admin_token = ph.hash(VAULTWARDEN_ADMIN_TOKEN)
+ADMIN_TOKEN_UNHASHED = data.get("ADMIN_TOKEN_UNHASHED", "")
 
 # vaultwarden domain settings
 host = data.get("host", "")
@@ -74,8 +64,8 @@ app = {
     "SMTP_PASSWORD": smtp_settings["password"],
     "SMTP_ENCRYPTION": smtp_settings["encrypt_smtp"],
     "SMTP_FROM": smtp_settings["username"],
-    "ADMIN_TOKEN": hashed_admin_token,
-    "ADMIN_TOKEN_UNHASHED": VAULTWARDEN_ADMIN_TOKEN,
+    "ADMIN_TOKEN": VAULTWARDEN_ADMIN_TOKEN,
+    "ADMIN_TOKEN_UNHASHED": ADMIN_TOKEN_UNHASHED,
 }
 
 # Write everything into the env file at once
