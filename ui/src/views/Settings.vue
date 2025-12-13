@@ -30,17 +30,6 @@
             >
             </cv-text-input>
             <cv-text-input
-              :label="$t('settings.admin_token_unhashed')"
-              placeholder="MyPassword"
-              v-model="ADMIN_TOKEN_UNHASHED"
-              class="mg-bottom"
-              :invalid-message="$t(error.ADMIN_TOKEN_UNHASHED)"
-              :disabled="loading.getConfiguration"
-              type="password"
-              ref="ADMIN_TOKEN_UNHASHED"
-            >
-            </cv-text-input>
-            <cv-text-input
               :label="$t('settings.admin_token')"
               placeholder="GjJH4GgJ5g475HFj87GJJglh"
               v-model="ADMIN_TOKEN"
@@ -49,7 +38,6 @@
               :disabled="loading.getConfiguration"
               type="password"
               ref="ADMIN_TOKEN"
-              readonly
             >
             </cv-text-input>
             <cv-toggle
@@ -107,8 +95,6 @@
 <script>
 import to from "await-to-js";
 import { mapState } from "vuex";
-import argon from "argon2-browser";
-import crypto from "crypto";
 import {
   QueryParamService,
   UtilService,
@@ -130,7 +116,6 @@ export default {
       urlCheckInterval: null,
       host: "",
       ADMIN_TOKEN: "",
-      ADMIN_TOKEN_UNHASHED: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: false,
       loading: {
@@ -142,7 +127,6 @@ export default {
         configureModule: "",
         host: "",
         ADMIN_TOKEN: "",
-        ADMIN_TOKEN_UNHASHED: "",
         lets_encrypt: "",
         http2https: "",
       },
@@ -165,21 +149,6 @@ export default {
     next();
   },
   methods: {
-    async hashAdminToken(token) {
-      const salt = crypto.randomBytes(32);
-
-      const hash = await argon.hash(token, {
-        memoryCost: 65540,
-        timeCost: 3,
-        parallelism: 4,
-        salt: salt,
-        hashLength: 32,
-      });
-      return hash;
-    },
-    isArgon2Hash(value) {
-      return typeof value === "string" && value.startsWith("$argon2id$");
-    },
     async getConfiguration() {
       this.loading.getConfiguration = true;
       this.error.getConfiguration = "";
@@ -226,7 +195,6 @@ export default {
       const config = taskResult.output;
       this.host = config.host;
       this.ADMIN_TOKEN = config.ADMIN_TOKEN;
-      this.ADMIN_TOKEN_UNHASHED = config.ADMIN_TOKEN_UNHASHED;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
       this.loading.getConfiguration = false;
@@ -292,24 +260,13 @@ export default {
         taskAction + "-completed",
         this.configureModuleCompleted
       );
-      let ADMIN_TOKEN_UNHASHED = this.ADMIN_TOKEN_UNHASHED;
-      let hashed_admin_token = await this.hashAdminToken(ADMIN_TOKEN_UNHASHED);
-      if (this.isArgon2Hash(this.ADMIN_TOKEN)) {
-        hashed_admin_token = this.ADMIN_TOKEN;
-      } else if (this.ADMIN_TOKEN_UNHASHED) {
-        hashed_admin_token = await this.hashAdminToken(
-          this.ADMIN_TOKEN_UNHASHED
-        );
-      } else {
-        hashed_admin_token = this.ADMIN_TOKEN;
-      }
+
       const res = await to(
         this.createModuleTaskForApp(this.instanceName, {
           action: taskAction,
           data: {
             host: this.host,
-            ADMIN_TOKEN: hashed_admin_token,
-            ADMIN_TOKEN_UNHASHED: this.ADMIN_TOKEN_UNHASHED,
+            ADMIN_TOKEN: this.ADMIN_TOKEN,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
           },
