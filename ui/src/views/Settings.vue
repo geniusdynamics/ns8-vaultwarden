@@ -107,7 +107,7 @@
 <script>
 import to from "await-to-js";
 import { mapState } from "vuex";
-import * as argon from "argon2";
+import argon from "argon2-browser";
 import crypto from "crypto";
 import {
   QueryParamService,
@@ -169,7 +169,6 @@ export default {
       const salt = crypto.randomBytes(32);
 
       const hash = await argon.hash(token, {
-        type: argon.argon2id,
         memoryCost: 65540,
         timeCost: 3,
         parallelism: 4,
