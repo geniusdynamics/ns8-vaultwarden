@@ -32,6 +32,31 @@ buildah run \
 	nodebuilder-vaultwarden \
 	sh -c "yarn install && yarn build"
 
+# -----------------------------
+# Python builder (argon2)
+# -----------------------------
+if ! buildah containers --format "{{.ContainerName}}" | grep -q pythonbuilder-vaultwarden; then
+	echo "Pulling Python builder..."
+	buildah from --name pythonbuilder-vaultwarden \
+		docker.io/library/python:3.11-slim
+fi
+
+echo "Installing Python argon2..."
+buildah run pythonbuilder-vaultwarden sh -c "\
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    gcc \
+    libffi-dev \
+    libssl-dev && \
+  pip install --no-cache-dir argon2-cffi==23.1.0 && \
+  apt-get purge -y gcc && \
+  apt-get autoremove -y && \
+  rm -rf /var/lib/apt/lists/*"
+
+buildah copy --from pythonbuilder-vaultwarden "${container}" /usr/local /usr/local
+buildah copy --from pythonbuilder-vaultwarden "${container}" /lib /lib
+buildah copy --from pythonbuilder-vaultwarden "${container}" /usr/lib /usr/lib
+
 # Add imageroot directory to the container image
 buildah add "${container}" imageroot /imageroot
 buildah add "${container}" ui/dist /ui
