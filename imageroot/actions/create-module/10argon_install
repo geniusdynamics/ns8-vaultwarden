@@ -2,6 +2,7 @@
 
 # Install pip if not already present
 python3 -m ensurepip --upgrade
-
+echo "Pip Installed"
 # Install argon2-cffi package
 pip install argon2-cffi
+echo "Argon 2 Installed"
