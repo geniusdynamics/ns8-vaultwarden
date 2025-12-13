@@ -7,8 +7,5 @@ module.exports = {
         maxSize: 250000,
       },
     },
-    experiments: {
-      asyncWebAssembly: true,
-    },
   },
 };
