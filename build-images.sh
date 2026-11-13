@@ -14,6 +14,9 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="vaultwarden"
+# Node.js 25+ no longer ships Corepack, install it from npm
+# renovate: datasource=npm packageName=corepack
+corepack_version=0.36.0
 vaultwarden_version="1.37.1"
 
 # Create a new empty container image
@@ -22,7 +25,8 @@ container=$(buildah from scratch)
 # Reuse existing nodebuilder-kickstart container, to speed up builds
 if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-vaultwarden; then
 	echo "Pulling NodeJS runtime..."
-	buildah from --name nodebuilder-vaultwarden -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+	buildah from --name nodebuilder-vaultwarden -v "${PWD}:/usr/src:Z" docker.io/library/node:26.13.0-slim
+	buildah run nodebuilder-vaultwarden sh -c "npm install -g corepack@${corepack_version} && corepack enable"
 fi
 
 echo "Build static UI files with node..."
