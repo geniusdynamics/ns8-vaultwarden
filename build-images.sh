@@ -17,7 +17,8 @@ reponame="vaultwarden"
 # Node.js 25+ no longer ships Corepack, install it from npm
 # renovate: datasource=npm packageName=corepack
 corepack_version=0.36.0
-vaultwarden_version="1.37.1"
+# renovate: datasource=docker packageName=docker.io/vaultwarden/server
+vaultwarden_version=1.37.1
 
 # Create a new empty container image
 container=$(buildah from scratch)
