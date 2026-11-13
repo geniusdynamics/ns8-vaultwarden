@@ -86,8 +86,18 @@ app = {
     "ADMIN_TOKEN_UNHASHED": VAULTWARDEN_ADMIN_TOKEN,
 }
 
+# Vaultwarden refuses to start when only one of SMTP_HOST and SMTP_FROM is
+# set. Without a sender address, use one on the configured domain; without
+# a mail server, leave the mail settings out.
+if SMTP_HOST and "@" not in (SMTP_FROM or ""):
+    app["SMTP_FROM"] = "vaultwarden@" + DOMAIN.split("://")[-1].split("/")[0]
+if not SMTP_HOST:
+    for key in ("SMTP_HOST", "SMTP_PORT", "SMTP_USERNAME", "SMTP_PASSWORD", "SMTP_ENCRYPTION", "SMTP_FROM"):
+        app.pop(key, None)
+
 # Write everything into the env file at once
 agent.write_envfile("vaultwarden.env", app)
+os.chmod("vaultwarden.env", 0o600)  # holds the admin token and the SMTP password
 
 
 # Make sure everything is saved inside the environment file
