@@ -19,6 +19,7 @@ EnvironmentFile=%S/state/environment
 EnvironmentFile=-%S/state/smarthost.env
 WorkingDirectory=%S/state
 Restart=always
+RestartSec=10
 TimeoutStopSec=70
 ExecStartPre=/bin/mkdir -p config
 ExecStartPre=/bin/rm -f %t/vaultwarden-app.pid %t/vaultwarden-app.ctr-id

@@ -5,9 +5,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import sys
-import agent
+#
+# Write the cluster smarthost settings with the variable names Vaultwarden
+# reads. Vaultwarden refuses to start when SMTP_HOST is set (even empty)
+# without SMTP_FROM, so the mail settings are written only when the
+# smarthost is enabled, and always together with a sender address.
+#
+
 import os
+import agent
 
 # Connect the local Redis replica. This is necessary to consistently start
 # the service if the leader node is not reachable:
@@ -16,21 +22,29 @@ smtp_settings = agent.get_smarthost_settings(rdb)
 
 envfile = "smarthost.env"
 
+security = {
+    "starttls": "starttls",
+    "tls": "force_tls",
+}.get(smtp_settings.get("encrypt_smtp") or "", "off")
+
+host = os.environ.get("TRAEFIK_HOST") or "localhost"
+
 # Using .tmp suffix: do not overwrite the target file until the new one is
-# saved to disk:
-with open(envfile + ".tmp", "w") as efp:
-    # HINT for ns8-paperless-ngx: adjust variable names as needed
-    print(f"SMTP_ENABLED={'1' if smtp_settings['enabled'] else ''}", file=efp)
-    print(f"SMTP_HOST={smtp_settings['host']}", file=efp)
-    print(f"SMTP_PORT={smtp_settings['port']}", file=efp)
-    print(f"SMTP_USERNAME={smtp_settings['username']}", file=efp)
-    print(f"SMTP_PASSWORD={smtp_settings['password']}", file=efp)
-    print(f"SMTP_ENCRYPTION={smtp_settings['encrypt_smtp']}", file=efp)
-    print(f"SMTP_TLSVERIFY={'1' if smtp_settings['tls_verify'] else ''}", file=efp)
+# saved to disk. The file holds the smarthost password: owner only.
+fd = os.open(envfile + ".tmp", os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+with os.fdopen(fd, "w") as efp:
+    if smtp_settings.get("enabled") and smtp_settings.get("host"):
+        print(f"SMTP_HOST={smtp_settings['host']}", file=efp)
+        print(f"SMTP_PORT={smtp_settings['port']}", file=efp)
+        print(f"SMTP_SECURITY={security}", file=efp)
+        if smtp_settings.get("username"):
+            print(f"SMTP_USERNAME={smtp_settings['username']}", file=efp)
+            print(f"SMTP_PASSWORD={smtp_settings['password']}", file=efp)
+        print(f"SMTP_FROM=vaultwarden@{host}", file=efp)
+        if not smtp_settings.get("tls_verify"):
+            print("SMTP_ACCEPT_INVALID_CERTS=true", file=efp)
+    else:
+        print("# smarthost disabled: no mail settings", file=efp)
 
 # Commit changes by replacing the existing envfile:
 os.replace(envfile + ".tmp", envfile)
-
-# NOTE: The generated envfile can be included in the service container
-#       with `podman run --env-file` or in Systemd unit with
-#       `Environment=-%S/state/smarthost.env`
